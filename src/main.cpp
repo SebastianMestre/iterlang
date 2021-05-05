@@ -1,4 +1,5 @@
 #include "frontend.hpp"
+#include "interpreter.hpp"
 
 #include <iostream>
 
@@ -72,7 +73,7 @@ int main () {
 	ast.as_decl = {a, {11}};
 	frontend.asts.push_back(ast);
 
-	interpret(interpreter, frontend);
+	interpreter.interpret(frontend);
 
 	std::cout << interpreter.get(a) << '\n';
 }
