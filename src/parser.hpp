@@ -1,8 +1,7 @@
 #include "ast.hpp"
 
 #include <cctype>
-
-#include <cstdio>
+#include <cassert>
 
 struct Parser {
 	Frontend& frontend;
@@ -135,5 +134,18 @@ struct Parser {
 		ast.tag = Ast::Tag::Decl;
 		ast.as_decl = {str_id, expr};
 		return frontend.push(ast);
+	}
+
+	void parse_program() {
+		while (!match(EOF)) {
+
+			auto decl = parse_decl();
+			assert(decl.is_valid());
+
+			if (match('\n')) {
+				advance();
+				continue;
+			}
+		}
 	}
 };
