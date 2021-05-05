@@ -1,9 +1,10 @@
 #include "frontend.hpp"
 #include "interpreter.hpp"
+#include "parser.hpp"
 
 #include <iostream>
 
-int main () {
+void test1() {
 	Frontend frontend;
 	Interpreter interpreter;
 
@@ -75,5 +76,24 @@ int main () {
 
 	interpreter.interpret(frontend);
 
-	std::cout << interpreter.get(a) << '\n';
+	std::cout << "Expected: 6 -- Result: " << interpreter.get(a) << '\n';
+}
+
+void test2() {
+	Frontend frontend;
+	Parser parser {frontend, "variable=10+5"};
+	parser.source.push_back(EOF);
+	auto ast_id = parser.parse_decl();
+
+	Interpreter interpreter;
+	interpreter.interpret(frontend);
+
+	auto var = frontend.strings.get_id("variable");
+
+	std::cout << "Expected: 15 -- Result: " << interpreter.get(var) << '\n';
+}
+
+int main () {
+	test1();
+	test2();
 }
