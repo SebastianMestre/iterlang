@@ -42,7 +42,7 @@ struct Parser {
 		return str;
 	}
 
-	Ast::Id parse_lit() {
+	Ast::Id parse_int() {
 		if (!isdigit(peek()) || peek() == '0')
 			return {static_cast<std::size_t>(-1)};
 
@@ -54,8 +54,8 @@ struct Parser {
 		}
 
 		Ast::Ast ast;
-		ast.tag = Ast::Tag::Lit;
-		ast.as_lit = {value};
+		ast.tag = Ast::Tag::Int;
+		ast.as_int = {value};
 		return frontend.push(ast);
 	}
 
@@ -76,7 +76,7 @@ struct Parser {
 
 	Ast::Id parse_terminal() {
 		if (isdigit(peek()) && !match('0'))
-			return parse_lit();
+			return parse_int();
 
 		if (isalpha(peek()))
 			return parse_var();

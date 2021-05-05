@@ -41,8 +41,8 @@ struct Interpreter {
 				int rhs = pop();
 				push(lhs + rhs);
 				} break;
-			case Ast::Tag::Lit:
-				push(ast.as_lit.value);
+			case Ast::Tag::Int:
+				push(ast.as_int.value);
 				break;
 			case Ast::Tag::Var:
 				push(get(ast.as_var.name));

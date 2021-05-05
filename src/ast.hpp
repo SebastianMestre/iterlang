@@ -7,7 +7,7 @@ namespace Ast {
 enum struct Tag {
 	Decl,
 	Sum,
-	Lit,
+	Int,
 	Var,
 };
 
@@ -29,7 +29,7 @@ struct Sum {
 	Id rhs;
 };
 
-struct Lit {
+struct Int {
 	int value;
 };
 
@@ -42,7 +42,7 @@ struct Ast {
 	union {
 		Decl as_decl;
 		Sum as_sum;
-		Lit as_lit;
+		Int as_int;
 		Var as_var;
 	};
 };

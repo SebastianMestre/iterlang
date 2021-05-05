@@ -10,8 +10,8 @@ void test1() {
 
 	Ast::Ast ast;
 
-	ast.tag = Ast::Tag::Lit;
-	ast.as_lit = {1};
+	ast.tag = Ast::Tag::Int;
+	ast.as_int = {1};
 	frontend.asts.push_back(ast);
 
 	auto x = frontend.strings.get_id("x");
@@ -20,8 +20,8 @@ void test1() {
 	ast.as_decl = {x, {0}};
 	frontend.asts.push_back(ast);
 
-	ast.tag = Ast::Tag::Lit;
-	ast.as_lit = {2};
+	ast.tag = Ast::Tag::Int;
+	ast.as_int = {2};
 	frontend.asts.push_back(ast);
 
 	auto y = frontend.strings.get_id("y");
@@ -48,12 +48,12 @@ void test1() {
 	ast.as_decl = {z, {6}};
 	frontend.asts.push_back(ast);
 
-	ast.tag = Ast::Tag::Lit;
-	ast.as_lit = {1};
+	ast.tag = Ast::Tag::Int;
+	ast.as_int = {1};
 	frontend.asts.push_back(ast);
 
-	ast.tag = Ast::Tag::Lit;
-	ast.as_lit = {2};
+	ast.tag = Ast::Tag::Int;
+	ast.as_int = {2};
 	frontend.asts.push_back(ast);
 
 	ast.tag = Ast::Tag::Sum;
