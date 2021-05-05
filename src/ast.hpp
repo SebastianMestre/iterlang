@@ -12,7 +12,11 @@ enum struct Tag {
 };
 
 struct Id {
-	int idx;
+	std::size_t idx;
+
+	bool is_valid() {
+		return idx != static_cast<std::size_t>(-1);
+	}
 };
 
 struct Decl {
