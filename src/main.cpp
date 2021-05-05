@@ -93,7 +93,29 @@ void test2() {
 	std::cout << "Expected: 15 -- Result: " << interpreter.get(var) << '\n';
 }
 
+void test3() {
+	Frontend frontend;
+
+	std::string source =
+R"(x=1
+y=2
+z=x+y
+a=1+2+z)";
+	source.push_back(EOF);
+
+	Parser parser {frontend, std::move(source)};
+	parser.parse_program();
+
+	Interpreter interpreter;
+	interpreter.interpret(frontend);
+
+	auto a = frontend.strings.get_id("a");
+
+	std::cout << "Expected: 6 -- Result: " << interpreter.get(a) << '\n';
+}
+
 int main () {
 	test1();
 	test2();
+	test3();
 }
