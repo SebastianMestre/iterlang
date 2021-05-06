@@ -114,8 +114,26 @@ a=1+2+z)";
 	std::cout << "Expected: 6 -- Result: " << interpreter.get(a) << '\n';
 }
 
+void test4 () {
+	Frontend frontend;
+
+	std::string source = "a=3.0+3.5";
+	source.push_back(EOF);
+
+	Parser parser {frontend, std::move(source)};
+	parser.parse_program();
+
+	Interpreter interpreter;
+	interpreter.interpret(frontend);
+
+	auto a = frontend.strings.get_id("a");
+
+	std::cout << "Expected: 6.5 -- Result: " << interpreter.get(a) << '\n';
+}
+
 int main () {
 	test1();
 	test2();
 	test3();
+	test4();
 }

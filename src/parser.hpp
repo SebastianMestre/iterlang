@@ -42,20 +42,44 @@ struct Parser {
 		return str;
 	}
 
-	Ast::Id parse_int() {
-		if (!isdigit(peek()) || peek() == '0')
+	Ast::Id parse_numeric() {
+		if (!isdigit(peek()) || peek() == '.')
 			return {static_cast<std::size_t>(-1)};
 
-		int value = 0;
-		while (isdigit(peek())) {
-			value *= 10;
-			value += peek() - '0';
+		bool leading_zero = peek() == '0';
+		bool dot = false;
+
+		int start_idx = source_idx;
+		while (1) {
+			if (match('.')) {
+				if (dot)
+					return {static_cast<std::size_t>(-1)};
+				dot = true;
+				advance();
+				continue;
+			}
+
+			if (!isdigit(peek()))
+				break;
+
 			advance();
 		}
+		int end_idx = source_idx;
 
 		Ast::Ast ast;
-		ast.tag = Ast::Tag::Int;
-		ast.as_int = {value};
+
+		if (dot) {
+			float value = std::stof(std::string(&source[start_idx], &source[end_idx]));
+			ast.tag = Ast::Tag::Num;
+			ast.as_num = {value};
+		} else {
+			if (leading_zero)
+				return {static_cast<std::size_t>(-1)};
+			int value = std::stoi(std::string(&source[start_idx], &source[end_idx]));
+			ast.tag = Ast::Tag::Int;
+			ast.as_int = {value};
+		}
+
 		return frontend.push(ast);
 	}
 
@@ -75,8 +99,8 @@ struct Parser {
 	}
 
 	Ast::Id parse_terminal() {
-		if (isdigit(peek()) && !match('0'))
-			return parse_int();
+		if (isdigit(peek()))
+			return parse_numeric();
 
 		if (isalpha(peek()))
 			return parse_var();

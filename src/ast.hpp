@@ -8,6 +8,7 @@ enum struct Tag {
 	Decl,
 	Sum,
 	Int,
+	Num,
 	Var,
 };
 
@@ -33,6 +34,10 @@ struct Int {
 	int value;
 };
 
+struct Num {
+	float value;
+};
+
 struct Var {
 	String::Id name;
 };
@@ -43,6 +48,7 @@ struct Ast {
 		Decl as_decl;
 		Sum as_sum;
 		Int as_int;
+		Num as_num;
 		Var as_var;
 	};
 };

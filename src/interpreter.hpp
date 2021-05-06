@@ -107,6 +107,9 @@ struct Interpreter {
 			case Ast::Tag::Int:
 				push(ast.as_int.value);
 				break;
+			case Ast::Tag::Num:
+				push(ast.as_num.value);
+				break;
 			case Ast::Tag::Var:
 				push(get(ast.as_var.name));
 				break;
