@@ -1,6 +1,7 @@
 #include "frontend.hpp"
 #include "interpreter.hpp"
 #include "parser.hpp"
+#include "typecheck.hpp"
 
 #include <iostream>
 
@@ -131,9 +132,44 @@ void test4 () {
 	std::cout << "Expected: 6.5 -- Result: " << interpreter.get(a) << '\n';
 }
 
+void test5 () {
+	Frontend frontend;
+
+	std::string source = R"(a=3.0+3.5
+b=10)";
+	source.push_back(EOF);
+
+	Parser parser {frontend, std::move(source)};
+	parser.parse_program();
+
+	TypeChecker type_checker;
+	bool well_typed = type_checker.check(frontend);
+
+	std::cout << "Expected: 1 -- Result: " << well_typed << '\n';
+}
+
+void test6 () {
+	Frontend frontend;
+
+	std::string source = R"(a=3.0+3.5
+b=10
+c=a+b)";
+	source.push_back(EOF);
+
+	Parser parser {frontend, std::move(source)};
+	parser.parse_program();
+
+	TypeChecker type_checker;
+	bool well_typed = type_checker.check(frontend);
+
+	std::cout << "Expected: 0 -- Result: " << well_typed << '\n';
+}
+
 int main () {
 	test1();
 	test2();
 	test3();
 	test4();
+	test5();
+	test6();
 }
