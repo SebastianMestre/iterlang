@@ -165,6 +165,26 @@ c=a+b)";
 	std::cout << "Expected: 0 -- Result: " << well_typed << '\n';
 }
 
+void test7() {
+	Frontend frontend;
+
+	std::string source = R"(
+		a = 6.5
+		b = a + 1.0
+	)";
+	source.push_back(EOF);
+
+	Parser parser {frontend, std::move(source)};
+	parser.parse_program();
+
+	Interpreter interpreter;
+	interpreter.interpret(frontend);
+
+	auto b = frontend.strings.get_id("b");
+
+	std::cout << "Expected: 7.5 -- Result: " << interpreter.get(b) << '\n';
+}
+
 int main () {
 	test1();
 	test2();
@@ -172,4 +192,5 @@ int main () {
 	test4();
 	test5();
 	test6();
+	test7();
 }

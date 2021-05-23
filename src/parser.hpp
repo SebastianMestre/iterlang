@@ -12,6 +12,28 @@ struct Parser {
 		: frontend {frontend}
 		, source {std::move(source)}
 		{}
+	
+	void eat_whitespace() {
+		while (1) {
+			char c = peek();
+			if (c == ' ' || c == '\t' || c == '\n') {
+				advance();
+			} else {
+				break;
+			}
+		}
+	}
+
+	void eat_spaces() {
+		while (1) {
+			char c = peek();
+			if (c == ' ' || c == '\t') {
+				advance();
+			} else {
+				break;
+			}
+		}
+	}
 
 	char peek(int d = 0) {
 		return source[source_idx + d];
@@ -115,6 +137,8 @@ struct Parser {
 			return {static_cast<std::size_t>(-1)};
 
 		while (1) {
+			eat_spaces();
+
 			if (match('\n') || match(EOF))
 				break;
 
@@ -122,6 +146,7 @@ struct Parser {
 				return {static_cast<std::size_t>(-1)};
 			advance();
 
+			eat_spaces();
 			auto rhs = parse_terminal();
 
 			if (!rhs.is_valid())
@@ -143,10 +168,12 @@ struct Parser {
 		if (name.empty())
 			return {static_cast<std::size_t>(-1)};
 
+		eat_whitespace();
 		if (!match('='))
 			return {static_cast<std::size_t>(-1)};
 		advance();
 
+		eat_whitespace();
 		auto expr = parse_expression();
 
 		if (!expr.is_valid())
@@ -161,11 +188,15 @@ struct Parser {
 	}
 
 	void parse_program() {
-		while (!match(EOF)) {
+		while (1) {
+			eat_whitespace();
+
+			if (match(EOF)) break;
 
 			auto decl = parse_decl();
 			assert(decl.is_valid());
 
+			eat_spaces();
 			if (match('\n')) {
 				advance();
 				continue;
